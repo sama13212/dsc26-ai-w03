@@ -1,16 +1,20 @@
-# AI usage
+# AI Usage
 
-<!-- Replace every comment below with your own words. Short is fine. The grader checks only
-     that this file exists and has been changed from this template; your Track Mentor reads it. -->
+## Tools Used
 
-## Tools I used, and for what
+- **ChatGPT:** Used to understand the task requirements, discuss implementation approaches, review code, and debug errors.
+- **VS Code:** Used to edit and organize the project files.
+- **uv:** Used to install dependencies and run the project.
+- **pytest:** Used to run the provided public tests and additional validation tests.
 
-<!-- e.g. "Claude for the pipeline skeleton; Copilot autocomplete in time_split" -->
+## AI Suggestions Reviewed and Corrected
 
-## AI-suggested code I rejected or fixed in add_history_features or time_split
+An initial cumulative-history approach could depend on the input row order. I reviewed and corrected the history calculation to order customer and timestamp groups before computing cumulative counts and failure rates.
 
-<!-- What was wrong, and which test (public, your own, or a grader test name) showed it. -->
+I then tested this behavior by calculating history features on the original dataset and on a shuffled version of the same dataset. The results matched for every parcel.
 
-## How I checked that my model has no leak
+Test result: `PASS: History features are independent of input row order`.
 
-<!-- One sentence. -->
+## Leakage Prevention
+
+Only features available when a parcel is created are used for prediction. The target (`failed`), `delivered_at`, `courier_notes`, and `parcel_id` are excluded from model features. Customer history uses only strictly earlier parcels, and the model is evaluated using a chronological train-test split. The test set is not used to fit the model.
